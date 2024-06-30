@@ -1,0 +1,16 @@
+import random
+ def main():
+students = [
+		Student("David", 3),
+   		Student("Charlie", 3),
+ Student("Alice", 3),
+ Student("Bob", 3)
+]
+	    random.shuffle(students)
+	    students.sort(key=lambda student: student.getName())
+for student in students:
+print(student)
+    		print()
+ 
+if __name__ == "__main__":
+	main()
