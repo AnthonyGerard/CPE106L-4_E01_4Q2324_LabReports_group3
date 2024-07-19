@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "669260f029b63784f528703b"
+  },
+  "name": "Sample1",
+  "email": "sample@email.com",
+  "password": {
+    "$binary": {
+      "base64": "JDJiJDEyJERGMUYxL1JVZ093em8vOGVQOURGck9YSk5lWkRFbmhnZXRJVnB0Mmd1UElXRy9jQ2Q3SVo2",
+      "subType": "00"
+    }
+  },
+  "role": "Resident"
+},
+{
+  "_id": {
+    "$oid": "6692619abb7392b4397c7902"
+  },
+  "name": "Vet1",
+  "email": "vet1@email.com",
+  "password": {
+    "$binary": {
+      "base64": "JDJiJDEyJGhnR2guSnFXRlNhLlVmZ3dzUDFKWWVpL3hPYTdmMVhvLnlzMFNzSHNhZ2Znb0pKaUhnTEN5",
+      "subType": "00"
+    }
+  },
+  "role": "Veterinarian"
+},
+{
+  "_id": {
+    "$oid": "669261bbbb7392b4397c7903"
+  },
+  "name": "chw1",
+  "email": "chw1@email.com",
+  "password": {
+    "$binary": {
+      "base64": "JDJiJDEyJFhlUVlraHpTTmcwSG9HenJKVHkwaS5yM0VSZnIyMUh6UHNUZTZ3QnB4OXZYcFpiQUJjMlBX",
+      "subType": "00"
+    }
+  },
+  "role": "Community Health Worker"
+}]
