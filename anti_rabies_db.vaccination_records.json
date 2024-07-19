@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "6692648f1c7e82078105b689"
+  },
+  "pet_id": "petID1",
+  "vaccine_name": "AntiRabies1",
+  "vaccination_date": "2024",
+  "veterinarian_id": {
+    "$oid": "6692619abb7392b4397c7902"
+  }
+},
+{
+  "_id": {
+    "$oid": "66926563323874f52d7e9595"
+  },
+  "pet_id": "petID2",
+  "vaccine_name": "AntiRabies",
+  "vaccination_date": "2024",
+  "veterinarian_id": {
+    "$oid": "669260f029b63784f528703b"
+  }
+}]

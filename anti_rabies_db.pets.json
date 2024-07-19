@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "669264721c7e82078105b688"
+  },
+  "owner_id": {
+    "$oid": "6692619abb7392b4397c7902"
+  },
+  "pet_name": "pet1",
+  "species": "dog",
+  "age": "5",
+  "vaccination_status": "Vaccinated"
+},
+{
+  "_id": {
+    "$oid": "66926542323874f52d7e9594"
+  },
+  "owner_id": {
+    "$oid": "669260f029b63784f528703b"
+  },
+  "pet_name": "pet2",
+  "species": "cat",
+  "age": "4",
+  "vaccination_status": "Not Vaccinated"
+}]
