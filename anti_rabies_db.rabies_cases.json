@@ -1,10 +1,1 @@
-[{
-  "_id": {
-    "$oid": "6692657e323874f52d7e9596"
-  },
-  "reporter_id": {
-    "$oid": "669260f029b63784f528703b"
-  },
-  "case_details": "Dog Bite -> Adult Male",
-  "reported_date": "2023"
-}]
+
