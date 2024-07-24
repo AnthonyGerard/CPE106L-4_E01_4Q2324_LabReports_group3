@@ -11,3 +11,6 @@ class Pet:
             "vaccination_status": vaccination_status
         }
         self.pets_collection.insert_one(pet)
+
+    def get_all_pets(self):
+        return self.pets_collection.find()
