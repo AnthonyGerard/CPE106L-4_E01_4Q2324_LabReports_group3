@@ -9,3 +9,6 @@ class RabiesCase:
             "reported_date": reported_date
         }
         self.rabies_cases_collection.insert_one(case)
+
+    def get_all_rabies_cases(self):
+        return self.rabies_cases_collection.find()
