@@ -14,88 +14,61 @@ class MainApp:
         self.rabies_case_manager = RabiesCase(self.db_manager)
 
     def show_dashboard(self, page, user):
-        if user['role'] == 'Community Health Worker':
-            self.show_health_worker_dashboard(page, user)
-        elif user['role'] == 'Veterinarian':
-            self.show_veterinarian_dashboard(page, user)
-        elif user['role'] == 'Resident':
-            self.show_resident_dashboard(page, user)
+        pet_name_input = ft.TextField(label="Pet Name")
+        species_input = ft.TextField(label="Species")
+        age_input = ft.TextField(label="Age")
+        vaccination_status_input = ft.TextField(label="Vaccination Status")
 
-    def show_health_worker_dashboard(self, page, user):
-        # Health Worker Dashboard view
+        pet_id_input = ft.TextField(label="Pet ID")
+        vaccine_name_input = ft.TextField(label="Vaccine Name")
+        vaccination_date_input = ft.TextField(label="Vaccination Date")
+
+        case_details_input = ft.TextField(label="Case Details")
+        reported_date_input = ft.TextField(label="Reported Date")
+
         page.views.clear()
-        pet_list = self.get_pet_list()
-        vaccination_records_list = self.get_vaccination_records_list()
-        rabies_cases_list = self.get_rabies_cases_list()
-
-        page.overlay.append(
-            ft.AlertDialog(
-                title=ft.Text("Welcome"),
-                content=[
+        page.views.append(
+            ft.View(
+                controls=[
                     ft.Text(f"Welcome, {user['name']}!"),
                     ft.Text(f"Role: {user['role']}"),
-                    # View Pets
-                    ft.Text("View Pets"),
-                    ft.ElevatedButton("View All Pets", on_click=lambda e: self.show_dialog(page, "All Pets", pet_list)),
-                    ft.Divider(),
-                    # View Vaccination Records
-                    ft.Text("View Vaccination Records"),
-                    ft.ElevatedButton("View All Vaccination Records", on_click=lambda e: self.show_dialog(page, "All Vaccination Records", vaccination_records_list)),
-                    ft.Divider(),
-                    # View Rabies Cases
-                    ft.Text("View Rabies Cases"),
-                    ft.ElevatedButton("View All Rabies Cases", on_click=lambda e: self.show_dialog(page, "All Rabies Cases", rabies_cases_list)),
-                    ft.Divider(),
-                    # Logout Button
-                    ft.ElevatedButton("Logout", on_click=lambda e: self.show_login(page))
+                    ft.ListView(
+                    expand=True,
+                            controls=[
+                                # Add Pet Form
+                                ft.Text("Add Pet"),
+                                pet_name_input,
+                                species_input,
+                                age_input,
+                                vaccination_status_input,
+                                ft.ElevatedButton("Save Pet", on_click=lambda e: self.save_pet(e, pet_name_input, species_input, age_input, vaccination_status_input, user, page)),
+                                ft.Divider(),
+                                # Add Vaccination Record Form
+                                ft.Text("Add Vaccination Record"),
+                                pet_id_input,
+                                vaccine_name_input,
+                                vaccination_date_input,
+                                ft.ElevatedButton("Save Vaccination Record", on_click=lambda e: self.save_vaccination_record(e, pet_id_input, vaccine_name_input, vaccination_date_input, user, page)),
+                                ft.Divider(),
+                                # Add Rabies Case Form
+                                ft.Text("Add Rabies Case"),
+                                case_details_input,
+                                reported_date_input,
+                                ft.ElevatedButton("Save Rabies Case", on_click=lambda e: self.save_rabies_case(e, case_details_input, reported_date_input, user, page)),
+                                # Add more dashboard controls based on user role
+                                ft.ElevatedButton("Logout", on_click=lambda e: self.show_login(page)),
+                                ft.ElevatedButton("View Data", on_click=lambda e: self.view_data(e, page)),  
+                            ]
+                        
+                    )
                 ]
             )
         )
-
-    def show_veterinarian_dashboard(self, page, user):
-        # Veterinarian Dashboard view
-        page.views.clear()
-        pet_list = self.get_pet_list()
-        vaccination_records_list = self.get_vaccination_records_list()
-
-        page.overlay.append(
-            ft.AlertDialog(
-                title=ft.Text("Welcome"),
-                content=[
-                    ft.Text(f"Welcome, {user['name']}!"),
-                    ft.Text(f"Role: {user['role']}"),
-                    # View Pets
-                    ft.Text("View Pets"),
-                    ft.ElevatedButton("View All Pets", on_click=lambda e: self.show_dialog(page, "All Pets", pet_list)),
-                    ft.Divider(),
-                    # View Vaccination Records
-                    ft.Text("View Vaccination Records"),
-                    ft.ElevatedButton("View All Vaccination Records", on_click=lambda e: self.show_dialog(page, "All Vaccination Records", vaccination_records_list)),
-                    ft.Divider(),
-                    # Logout Button
-                    ft.ElevatedButton("Logout", on_click=lambda e: self.show_login(page))
-                ]
-            )
-        )
-
-    def show_resident_dashboard(self, page, user):
-        # Resident Dashboard view
-        page.views.clear()
-        page.overlay.append(
-            ft.AlertDialog(
-                title=ft.Text("Welcome"),
-                content=[
-                    ft.Text(f"Welcome, {user['name']}!"),
-                    ft.Text(f"Role: {user['role']}"),
-                    # Logout Button
-                    ft.ElevatedButton("Logout", on_click=lambda e: self.show_login(page))
-                ]
-            )
-        )
+        page.update()
 
     def show_login(self, page):
         page.views.clear()
-        page.overlay.append(
+        page.views.append(
             ft.View(
                 controls=[
                     ft.Text("Anti-Rabies Database System", style="headline1"),
@@ -113,20 +86,21 @@ class MainApp:
                 ]
             )
         )
+        page.update()
+
 
     def login(self, event, page):
         email = self.email_input.value
         password = self.password_input.value
         user = self.user_manager.authenticate_user(email, password)
         if user:
-            page.overlay.append(
-                ft.AlertDialog(title=ft.Text("Success"), content=[ft.Text("Login successful!")])
-            )
+            page.dialog = ft.AlertDialog(title=ft.Text("Success"), content=ft.Text("Login successful!"))
+            page.dialog.open = True
             self.show_dashboard(page, user)
         else:
-            page.overlay.append(
-                ft.AlertDialog(title=ft.Text("Error"), content=[ft.Text("Invalid credentials!")])
-            )
+            page.dialog = ft.AlertDialog(title=ft.Text("Error"), content=ft.Text("Invalid credentials!"))
+            page.dialog.open = True
+        page.update()
 
     def register(self, event, page):
         name = self.name_input.value
@@ -134,36 +108,62 @@ class MainApp:
         password = self.password_reg_input.value
         role = self.role_dropdown.value
         self.user_manager.register_user(name, email, password, role)
-        page.overlay.append(
-            ft.AlertDialog(title=ft.Text("Success"), content=[ft.Text("Registration successful!")])
-        )
+        page.dialog = ft.AlertDialog(title=ft.Text("Success"), content=ft.Text("Registration successful!"))
+        page.dialog.open = True
+        page.update()
 
-    def get_pet_list(self):
-        pets = self.db_manager.get_pets_collection().find({})
-        pet_list = []
+    def save_pet(self, event, pet_name_input, species_input, age_input, vaccination_status_input, user, page):
+        pet_name = pet_name_input.value
+        species = species_input.value
+        age = age_input.value
+        vaccination_status = vaccination_status_input.value
+        self.pet_manager.add_pet(user['_id'], pet_name, species, age, vaccination_status)
+        page.dialog = ft.AlertDialog(title=ft.Text("Success"), content=ft.Text("Pet added successfully!"))
+        page.dialog.open = True
+        page.update()
+
+    def save_vaccination_record(self, event, pet_id_input, vaccine_name_input, vaccination_date_input, user, page):
+        pet_id = pet_id_input.value
+        vaccine_name = vaccine_name_input.value
+        vaccination_date = vaccination_date_input.value
+        veterinarian_id = user['_id']
+        self.vaccination_record_manager.add_vaccination_record(pet_id, vaccine_name, vaccination_date, veterinarian_id)
+        page.dialog = ft.AlertDialog(title=ft.Text("Success"), content=ft.Text("Vaccination record added successfully!"))
+        page.dialog.open = True
+        page.update()
+
+    def save_rabies_case(self, event, case_details_input, reported_date_input, user, page):
+        case_details = case_details_input.value
+        reported_date = reported_date_input.value
+        reporter_id = user['_id']
+        self.rabies_case_manager.add_rabies_case(reporter_id, case_details, reported_date)
+        page.dialog = ft.AlertDialog(title=ft.Text("Success"), content=ft.Text("Rabies case added successfully!"))
+        page.dialog.open = True
+        page.update()
+    
+    def view_data(self, event, page):
+        pet_manager = Pet(self.db_manager)  
+        pets = self.pet_manager.get_all_pets()
+        vaccination_record_manager = VaccinationRecord(self.db_manager)  
+        vaccination_records = self.vaccination_record_manager.get_all_vaccination_records()
+        rabies_case_manager = RabiesCase(self.db_manager)  
+        rabies_cases = self.rabies_case_manager.get_all_rabies_cases()
+
+        data_text = "Pets:\n"
         for pet in pets:
-            pet_list.append(f"Pet Name: {pet['pet_name']}, Species: {pet['species']}, Age: {pet['age']}")
-        return pet_list
-
-    def get_vaccination_records_list(self):
-        vaccination_records = self.db_manager.get_vaccination_records_collection().find({})
-        record_list = []
+            data_text += f"Name: {pet.get('pet_name', 'Unknown')}, Species: {pet.get('species', 'Unknown')}, Age: {pet.get('age', 'Unknown')}, Vaccination Status: {pet.get('vaccination_status', 'Unknown')}\n"
+        data_text += "\nVaccination Records:\n"
         for record in vaccination_records:
-            record_list.append(f"Pet ID: {record['pet_id']}, Vaccine Name: {record['vaccine_name']}, Vaccination Date: {record['vaccination_date']}")
-        return record_list
-
-    def get_rabies_cases_list(self):
-        rabies_cases = self.db_manager.get_rabies_cases_collection().find({})
-        case_list = []
+            data_text += f"Pet ID: {record.get('pet_id', 'Unknown')}, Vaccine Name: {record.get('vaccine_name', 'Unknown')}, Vaccination Date: {record.get('vaccination_date', 'Unknown')}\n"
+        data_text += "\nRabies Cases:\n"
         for case in rabies_cases:
-            case_list.append(f"Case Details: {case['case_details']}, Reported Date: {case['reported_date']}")
-        return case_list
+            data_text += f"Case Details: {case.get('case_details', 'Unknown')}, Reported Date: {case.get('reported_date', 'Unknown')}\n"
 
-    def show_dialog(self, page, title, content_list):
-        dialog_content = [ft.Text(item) for item in content_list]
-        page.overlay.append(
-            ft.AlertDialog(title=ft.Text(title), content=dialog_content)
-        )
+        page.dialog = ft.AlertDialog(title=ft.Text("Data"), content=ft.Text(data_text))
+        page.dialog.open = True
+        page.update()
+
+   
 
     def main(self, page):
         self.email_input = ft.TextField(label="Email")
@@ -179,7 +179,9 @@ class MainApp:
                 ft.dropdown.Option("Resident")
             ]
         )
-        self.show_login(page)
+        login_btn = ft.ElevatedButton(text="Login", on_click=lambda e: self.login(e, page))
+
+        self.show_login(page)   
 
 if __name__ == "__main__":
     app = MainApp()
